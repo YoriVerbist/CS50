@@ -9,6 +9,7 @@ int main(void)
     int totalSum = 0;
     long long x; // x is just used to put the numbers in an array
     int count;
+    int count2 = 0;
 
     do
     {
@@ -39,12 +40,19 @@ int main(void)
     for(int i = 0; i < count; i += 2)
     {
         multiply = numberArray[i] *2;
+
+        // check how many digits the int has
+        while(multiply > 0)
+        {
+            multiply /= 10;
+            count2++;
+        }
         
         // for loop to add up the digits form multiply
-        for(int j = 0; j < multiply; j++)
+        for(int j = 0; j < count2; j++)
         {
-            productSum[j] = multiply % 10;
-            multiply /= 10;
+            productSum[j] = count2 % 10;
+            count2 /= 10;
             totalSum += productSum[j];
         }
     }
