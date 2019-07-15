@@ -22,7 +22,7 @@ int main(int argc, string argv[])
                 return 2;
             }
         }
-        
+
         // Atoi() changes the String to an int
         int cipherkey = atoi(argv[1]);
         //Ask for the text they want to encrypt
@@ -34,7 +34,7 @@ int main(int argc, string argv[])
         {
             cipherkey -= 26;
         }
-        
+
         printf("ciphertext: ");
         for (int i = 0; i < n; i++)
         {
@@ -51,10 +51,9 @@ int main(int argc, string argv[])
             {
                 printf("%c", message[i]);
             }
-            
         }
         printf("\n");
-        
+
         return 0;
     }
 }
