@@ -41,16 +41,20 @@ If `biHeight` is negative, `biCompression` must either be `BI_RGB` or `BI-BITFIE
 
 ## Why is the third argument to `fread` always `1` in our code?
 
-The third argument gives the number of elements. Since we only read 1 file it's 1.
+this means that 1 block of size sizeof(RGBTRIPLE) (aka 3 bytes) will be read from inptr and written into &triple.
 
 ## What value does `copy.c` assign to `padding` if `bi.biWidth` is `3`?
 
-TODO
+`int padding =  (4 - (bi.biWidth * sizeof(RGBTRIPLE)) % 4) % 4;`
+So if `bi.biWidth` = `3` then the `padding` is also `3`. Because `sizeof(RGBTRIPLE)` is always `3` cause there are 3 colors.
 
 ## What does `fseek` do?
 
-TODO
+It tells the program where the file pointer needs to start. Wich in this case is the padding.
 
 ## What is `SEEK_CUR`?
 
-TODO
+`SEEK_CUR` moves the file pointer to a given location.  
+`SEEK_SET` moves the file pointer to the beginning of the file.  
+`SEEK_END` moves the file pointer to the end of the file.
+
