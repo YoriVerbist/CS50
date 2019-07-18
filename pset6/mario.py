@@ -14,8 +14,8 @@ def main():
 
     # Print the pyramid
     for i in range(height):
-        print(" " * (height - i - 1) + "#" * (i + 1) + "  " + "#" * (i + 1)\n)
+        print(" " * (height - i - 1) + "#" * (i + 1) + "  " + "#" * (i + 1))
 
-        
+
 if __name__ == "__main__":
     main()
