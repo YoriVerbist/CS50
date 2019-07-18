@@ -4,7 +4,7 @@ from cs50 import get_int
 
 
 def main():
-    height = "0"
+    height = 0
 
     # While loop to check if the value is between 1 and 8
     while 0 >= int(height) or int(height) > 8:
