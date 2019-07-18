@@ -1,25 +1,18 @@
+from cs50 import get_int
+
 # Program that prints mario pyramid
+def main():
+    height = "0"
 
-height = -5
+    # While loop to check if the value is between 1 and 8
+    while 0 >= int(height) or int(height) > 8:
+        height = get_int("How high do you want your pyramid?")
 
-# While loop to check if the value is between 1 and 8
-while 1 > height < 9:
-    height = int(input("How high do you want your pyramid?"))
+    height = int(height)
 
-x = height - 1
-hashes = 1
-y = 0
-
-while height > 0:
-    while x > 0:
-        print(" ", end = "")
-        x -= 1
-    while y < hashes:
-        print("#", end = "")
-        y += 1
-    print("  ")
-    while y < hashes:
-        print("#")
-    hashes += 1
-    height -= 1
-    print("\n")
+    # Print the pyramid
+    for i in range(height):
+        print(" " * (height - i - 1) + "#" * (i + 1) + "  " + "#" * (i + 1));
+        
+if __name__ == "__main__":
+    main()
