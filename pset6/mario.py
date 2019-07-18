@@ -1,6 +1,8 @@
 from cs50 import get_int
 
 # Program that prints mario pyramid
+
+
 def main():
     height = "0"
 
@@ -12,7 +14,8 @@ def main():
 
     # Print the pyramid
     for i in range(height):
-        print(" " * (height - i - 1) + "#" * (i + 1) + "  " + "#" * (i + 1));
+        print(" " * (height - i - 1) + "#" * (i + 1) + "  " + "#" * (i + 1)\n)
+
         
 if __name__ == "__main__":
     main()
