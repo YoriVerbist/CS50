@@ -1,6 +1,7 @@
 from sys import argv
 import sys
 
+
 def main():
     if len(argv) != 2:
         print("Usage: python caesar.py k")
