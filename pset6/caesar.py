@@ -5,6 +5,7 @@ import sys
 def main():
     if len(argv) != 2:
         print("Usage: python caesar.py k")
+        sys.exit()
     elif not argv[1].isdigit():
         print("Usage: python caesar.py k")
         sys.exit()
