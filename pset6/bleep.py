@@ -1,6 +1,5 @@
 from sys import argv
 import sys
-import re
 
 
 def main():

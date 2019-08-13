@@ -43,6 +43,7 @@ def compare():
 
     # Compare files
     if not request.form.get("algorithm"):
+    highlights2 = highlight(file2, regexes)
         abort(400, "missing algorithm")
     elif request.form.get("algorithm") == "lines":
         regexes = [f"^{re.escape(match)}$" for match in lines(file1, file2)]
@@ -60,7 +61,6 @@ def compare():
 
     # Highlight files
     highlights1 = highlight(file1, regexes)
-    highlights2 = highlight(file2, regexes)
 
     # Output comparison
     return render_template("compare.html", file1=highlights1, file2=highlights2)

@@ -4,8 +4,8 @@ from nltk.tokenize import sent_tokenize
 def lines(a, b):
     """Return lines in both a and b"""
 
-    line_a = a.split(sep="\n")
-    line_b = b.split(sep="\n")
+    line_a = a.split("\n")
+    line_b = b.split("\n")
     return [line_a, line_b]
 
 
@@ -20,5 +20,4 @@ def sentences(a, b):
 def substrings(a, b, n):
     """Return substrings of length n in both a and b"""
 
-    # TODO
     return []
