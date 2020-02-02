@@ -5,14 +5,14 @@
 #include <string.h>
 #include <math.h>
 
-int calculateIndex();
+float calculateIndex(float letters, float words, float sentences);
 
 int main(int argc, char const *argv[])
 {
-    char* text = get_string("Text: \n");
-    int letters = 0;
-    int sentences = 0;
-    int words = 1;
+    char *text = get_string("Text: \n"); // Get text input from user
+    float letters = 0;
+    float sentences = 0;
+    float words = 1; // 1 So it handles the end of the sentences (.)
 
     for (int i = 0; i < strlen(text); i++)
     {
@@ -30,18 +30,31 @@ int main(int argc, char const *argv[])
         }
     }
 
+    //printf("%i\n%i\n%i", letters, words, sentences);
+
     int index = calculateIndex(letters, words, sentences);
 
-    printf("Grade %i", index);
-    
+    if (index < 1)
+    {
+        printf("Before Grade 1\n");
+    }
+    else if (index >= 16)
+    {
+        printf("Grade 16+\n");
+    }
+    else
+    {
+        printf("Grade %i\n", index);
+    }
+
     return 0;
 }
 
-int calculateIndex(int letters, int words, int sentences)
+float calculateIndex(float letters, float words, float sentences)
 {
-    int L = ; // Average number of letters per 100 words.
-    int S = ; // Average number of sentences per 100 words.
-    int index = 0.0588 * L - 0.296 * S - 15.8;
-    
-    return round(index);
+    float L = 100 / words * letters; // Average number of letters per 100 words.
+    float S = (100 / words) * sentences; // Average number of sentences per 100 words.
+    float index = round(0.0588 * L - 0.296 * S - 15.8);
+
+    return index;
 }
