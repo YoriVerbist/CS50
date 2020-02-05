@@ -16,7 +16,8 @@ int main(void)
     {
         dollars = get_float("Change owed: ");
 
-    } while (dollars < 0);
+    } 
+    while (dollars < 0);
     
     int cents = round(dollars * 100);
 
@@ -47,8 +48,8 @@ int main(void)
         }
         
     }
-        int total = quaters + dimes + nickles + pennies;
-        printf("%i\n", total);
+    int total = quaters + dimes + nickles + pennies;
+    printf("%i\n", total);
 
     return 0;
 }

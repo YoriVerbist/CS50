@@ -9,20 +9,21 @@ int main(void)
     do
     {
         height = get_int("How high do you want the pyramide to be? ");
-    } while (height < 1 || height > 8); // Only accept height between 0 and 9
+    } 
+    while (height < 1 || height > 8);   // Only accept height between 0 and 9
 
-    for(int line = 0; line < height; line++) // Line per line
+    for (int line = 0; line < height; line++) // Line per line
     {
-        for(int spaces = height - line; spaces > 1; spaces--) // Prints the spaces
+        for (int spaces = height - line; spaces > 1; spaces--) // Prints the spaces
         {
             printf(" ");
         }
-        for(int hashes = 0; hashes < line + 1; hashes++) // Prints hashes
+        for (int hashes = 0; hashes < line + 1; hashes++) // Prints hashes
         {
             printf("#");
         }
-        printf(" ");
-        for(int hashes = 0; hashes < line + 1; hashes++)
+        printf("  ");
+        for (int hashes = 0; hashes < line + 1; hashes++)
         {
             printf("#");
         }
