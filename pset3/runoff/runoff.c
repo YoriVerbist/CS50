@@ -1,5 +1,6 @@
 #include <cs50.h>
 #include <stdio.h>
+#include <string.h>
 
 // Max voters and candidates
 #define MAX_VOTERS 100
@@ -129,13 +130,10 @@ bool vote(int voter, int rank, string name)
 {
     for (int i = 0; i < candidate_count; i++)
     {
-        for (int j = 0; j < candidate_count; j++)
+        if (strcmp(candidates[i].name, name) == 0)
         {
-            if (strcmp(candidates[i].name, name) == 0)
-            {
-                preferences[i][rank] = name;
-                return true;
-            }
+            preferences[voter][rank] = i;
+            return true;
         }
     }
     
