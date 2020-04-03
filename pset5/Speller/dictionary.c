@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdint.h>
 
 
 #include "dictionary.h"
@@ -17,7 +18,7 @@ typedef struct node
 node;
 
 // Number of buckets in hash table
-const unsigned int N = 26;
+const unsigned int N = 65536;
 
 // Hash table
 node *table[N];
@@ -32,8 +33,17 @@ bool check(const char *word)
 // Hashes word to a number
 unsigned int hash(const char *word)
 {
-    // TODO
-    return 0;
+    // From: https://github.com/curiouskiwi/cs50x-help/blob/master/hash.c
+
+    uint32_t hash = 0;
+    while (*word)
+    {
+        hash = (*word | 0x20);
+        word++;
+    }
+
+    // return a value between 0 and 65535
+    return (int)((hash >> 16) ^ (hash & 0xffff));
 }
 
 // Loads dictionary into memory, returning true if successful else false
