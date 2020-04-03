@@ -82,7 +82,7 @@ bool load(const char *dictionary)
     char *word = malloc(LENGTH * sizeof(char)); // Make memory free for the max length of a word
     int f = 0;
     // Read strings from file
-    for (int elements = 0; f != EOF; elements++)
+    for (int i = 0; f != EOF; i++)
     {
         f = fscanf(file, "%s", word);
 
@@ -90,6 +90,7 @@ bool load(const char *dictionary)
         node *n = malloc(sizeof(node)); // Get enough memory for the node
         if (n == NULL)
         {
+            fclose(file);
             return false;
         }
         strcpy(n->word, word); // Copy
@@ -110,6 +111,8 @@ bool load(const char *dictionary)
             table[place] = n;
         }
     }
+    free(word);
+    fclose(file);
     return true;
 }
 
@@ -122,14 +125,17 @@ unsigned int size(void)
 // Unloads dictionary from memory, returning true if successful else false
 bool unload(void)
 {
-    node *list = table[0];
-    node *tmp = list;
-
-    while (list != NULL)
+    for (int i = 0; i < N; i++)
     {
-        tmp = list->next;
-        free(list);
-        list = tmp;
+        node *list = table[i];
+        node *tmp = list;
+
+        while (list != NULL)
+        {
+            tmp = list->next;
+            free(list);
+            list = tmp;
+        }
     }
     return true;
 }
