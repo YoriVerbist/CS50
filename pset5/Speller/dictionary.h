@@ -9,6 +9,8 @@
 // (e.g., pneumonoultramicroscopicsilicovolcanoconiosis)
 #define LENGTH 45
 
+extern unsigned int totalWords;
+
 // Prototypes
 bool check(const char *word);
 unsigned int hash(const char *word);

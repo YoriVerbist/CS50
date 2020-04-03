@@ -24,8 +24,8 @@ const unsigned int N = 65536;
 // Hash table
 node *table[N];
 
-// Keep track of the total numbers in the dictionary
-unsigned long words = 0;
+unsigned int totalWords = 0;
+
 
 // Returns true if word is in dictionary else false
 bool check(const char *word)
@@ -60,6 +60,7 @@ unsigned int hash(const char *word)
     {
         hash = (*word | 0x20);
         word++;
+        totalWords++;
     }
 
     // return a value between 0 and 65535
@@ -76,50 +77,55 @@ bool load(const char *dictionary)
     }
     
     char *word = malloc(LENGTH * sizeof(char)); // Make memory free for the max length of a word
+    int f = 0;
     // Read strings from file
-    while (fscanf(file, "%s", word) != EOF)
+    for (int elements = 0; f != EOF; elements++)
     {
-        fscanf(file, "%s", word);
+        f = fscanf(file, "%s", word);
 
         // Create a new node for each word
-        node *n = malloc(sizeof(node));
+        node *n = malloc(sizeof(node)); // Get enough memory for the node
         if (n == NULL)
         {
             return false;
         }
-        strcpy(n->word, word);
+        strcpy(n->word, word); // Copy
         n->next = NULL;
 
         // Hash word
         int place = hash(n->word);
 
         //Insert node into hash table
-        if (table[place] == NULL)
+        if (table[place] != NULL)
         {
-            return false;
-        }
-        else if (table[place]->next == NULL)
-        {
-            table[place] = n;
+            n->next = table[place]->next; // Point to the fist element in the linked list
+            table[place]->next = n; // Point head to new element to push to the linked list
         }
         else
         {
-            n->next = table[place]->next;
-            table[place]->next = n;
+            table[place] = n;
         }
     }
-    return false;
+    return true;
 }
 
 // Returns number of words in dictionary if loaded else 0 if not yet loaded
 unsigned int size(void)
 {
-    return words;
+    return totalWords;
 }
 
 // Unloads dictionary from memory, returning true if successful else false
 bool unload(void)
 {
-    // TODO
-    return false;
+    node *list = table[0];
+    node *tmp = list;
+
+    while (list != NULL)
+    {
+        tmp = list->next;
+        free(list);
+        list = tmp;
+    }
+    return true;
 }
