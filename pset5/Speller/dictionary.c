@@ -34,18 +34,22 @@ bool check(const char *word)
     node *tmp = table[place];
 
     // Check if there are entries in the linked list
-    if (tmp->next == NULL)
+    if (tmp == NULL)
     {
         return false;
     }
     // As long there are nodes in the linked list keep going
     while (tmp->next != NULL)
     {
-        tmp = tmp->next; // Update the pointer to the next element in the linked list
         if (strcasecmp(tmp->word, word) == 0)
         {
             return true;
         }
+        tmp = tmp->next; // Update the pointer to the next element in the linked list
+    }
+    if (strcasecmp(tmp->word, word) == 0)
+    {
+            return true;
     }
     return false;
 }
@@ -60,7 +64,6 @@ unsigned int hash(const char *word)
     {
         hash = (*word | 0x20);
         word++;
-        totalWords++;
     }
 
     // return a value between 0 and 65535
@@ -94,6 +97,7 @@ bool load(const char *dictionary)
 
         // Hash word
         int place = hash(n->word);
+        totalWords++;
 
         //Insert node into hash table
         if (table[place] != NULL)
@@ -112,7 +116,7 @@ bool load(const char *dictionary)
 // Returns number of words in dictionary if loaded else 0 if not yet loaded
 unsigned int size(void)
 {
-    return totalWords;
+    return totalWords - 1; // -1 because we also add 1 to totalWords when there are no words left
 }
 
 // Unloads dictionary from memory, returning true if successful else false
