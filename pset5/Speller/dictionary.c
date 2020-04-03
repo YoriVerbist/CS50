@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>
+#include <strings.h>
 
 
 #include "dictionary.h"
@@ -23,10 +24,29 @@ const unsigned int N = 65536;
 // Hash table
 node *table[N];
 
+// Keep track of the total numbers in the dictionary
+unsigned long words = 0;
+
 // Returns true if word is in dictionary else false
 bool check(const char *word)
 {
-    // TODO
+    int place = hash(word);
+    node *tmp = table[place];
+
+    // Check if there are entries in the linked list
+    if (tmp->next == NULL)
+    {
+        return false;
+    }
+    // As long there are nodes in the linked list keep going
+    while (tmp->next != NULL)
+    {
+        tmp = tmp->next; // Update the pointer to the next element in the linked list
+        if (strcasecmp(tmp->word, word) == 0)
+        {
+            return true;
+        }
+    }
     return false;
 }
 
@@ -94,8 +114,7 @@ bool load(const char *dictionary)
 // Returns number of words in dictionary if loaded else 0 if not yet loaded
 unsigned int size(void)
 {
-    // TODO
-    return 0;
+    return words;
 }
 
 // Unloads dictionary from memory, returning true if successful else false
