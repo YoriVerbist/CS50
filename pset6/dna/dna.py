@@ -7,22 +7,33 @@ def main():
     else:
         csvName = sys.argv[1]
         txtName = sys.argv[2]
-        STRs = dict()
         with open(csvName, 'r') as csvFile:
-            lines = csvFile.readlines()
-            names = lines[0].split(",")
-            names.remove(names[0])
-            print(names)
+            names = csvFile.readlines()
+            STRs = names[0].split(",")
+            STRs.remove(STRs[0])
             
-            lines.remove(lines[0])
-            for line in lines:
-                amount = line.split(",")
-        
         with open(txtName, 'r') as txtFile:
             string = txtFile.read()
-    #print(string, names[0])
-    print(string.count(names[0]))
-    print(calculateOccurrences(string, names[0]))
+                
+        names.remove(names[0])
+        dna = "No match"
+            
+        for line in names:
+            count = 1
+            single = line.split(",")
+            for i in range(len(STRs) - 1):
+                amount = calculateOccurrences(string, STRs[i].strip("\n"))
+                if amount == int(single[i + 1]):
+                    dna = single[0]
+                    count += 1
+                    if count == len(STRs):
+                        dna2 = dna
+                        print(dna2)
+                        sys.exit()
+                else:
+                    break
+        print(dna)
+
 
 
 def calculateOccurrences(string, substring):
@@ -32,7 +43,6 @@ def calculateOccurrences(string, substring):
     while string.find(substring) != -1:
         string = string[place:]
         if string.find(substring, 0, len(substring)) == 0:
-        #if substring in string[place:place + len(substring)]:
             occurrences += 1
             string = string[len(substring):]
         else:
