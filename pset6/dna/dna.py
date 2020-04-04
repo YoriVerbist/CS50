@@ -28,20 +28,18 @@ def main():
 def calculateOccurrences(string, substring):
     occurrences = 0
     highest = 0
+    place = 0
     while string.find(substring) != -1:
-        place = string.find(substring)
         string = string[place:]
         if string.find(substring, 0, len(substring)) == 0:
         #if substring in string[place:place + len(substring)]:
             occurrences += 1
-            print(occurrences)
-            print("here")
+            string = string[len(substring):]
         else:
             occurrences = 0
+            string = string[1:]
         if occurrences > highest:
-                print(highest, occurrences)
                 highest = occurrences
-        string = string[1:]
     return highest
     
     
