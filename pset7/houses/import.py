@@ -23,7 +23,7 @@ def main():
                 full_name = name.split(" ")
                 first_name = full_name[0]
                 if len(full_name) == 2:
-                    middle_name = "NULL"
+                    middle_name = None
                     last_name = full_name[1]
                 else:
                     middle_name = full_name[1]

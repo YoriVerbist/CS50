@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
         return 3;
     }
 
-    // Remember filenames
+    // Remember fileSTRs
     char *infile = argv[optind];
     char *outfile = argv[optind + 1];
 
@@ -84,10 +84,10 @@ int main(int argc, char *argv[])
         return 7;
     }
 
-    // Determine padding for scanlines
+    // Determine padding for scannames
     int padding = (4 - (width * sizeof(RGBTRIPLE)) % 4) % 4;
 
-    // Iterate over infile's scanlines
+    // Iterate over infile's scannames
     for (int i = 0; i < height; i++)
     {
         // Read row into pixel array
