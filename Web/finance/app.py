@@ -120,9 +120,20 @@ def quote():
 def register():
     if request.method == "POST":
         user_name = request.form.get('username')
-        password = request.form.get('password').hash()
+        password = generate_password_hash(request.form.get('password'))
         
+        rows = db.execute("SELECT * FROM users WHERE username = :username",
+                          username=request.form.get("username"))
         
+        if len(rows) == 1:
+            return apology("Username already taken", 403)
+        
+        if (request.form.get('password') != request.form.get('conformation')):
+            return apology("Passwords do not match", 403)
+        
+        db.execute("INSERT INTO users (username, hash, cash) VALUES(?, ?, ?)",
+                   user_name, password, 10000)
+        redirect("/login")
     else:
         return render_template("register.html")
 
