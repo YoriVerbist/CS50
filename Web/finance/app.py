@@ -135,8 +135,6 @@ def history():
         sell["value"] = sell["value"]
         
     stocks = buys + sells
-    print(stocks)
-    stocks.sort()
     
     return render_template("history.html", stocks = stocks)
 
