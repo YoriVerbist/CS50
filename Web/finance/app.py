@@ -90,7 +90,6 @@ def buy():
         cash_dict = db.execute("SELECT cash FROM users WHERE id == ?",
                           user_id)
         cash = cash_dict[0]['cash']
-        print(price, amount)
         
         if (price * float(amount)) > int(cash):
             return apology("You don't have enough cash", 403)
@@ -100,6 +99,21 @@ def buy():
             cash -= price * float(amount)
             db.execute("UPDATE users SET cash = ? WHERE id == ?",
                        cash, user_id)
+        
+        exists = db.execute("SELECT name FROM SHARES WHERE user_id == ? and name = ?",
+                                user_id, official_symbol)
+        print(exists)
+        current_amount = db.execute("SELECT amount FROM stocks WHERE user_id == ? and name == ?",
+                          user_id, official_symbol)
+        print(current_amount[0]['amount'])
+        
+        if exists != []: 
+            new_shares = int(amount) + current_amount[0]['amount']
+            db.execute("UPDATE shares SET amount = ? WHERE user_id == ? and name == ?",
+                        new_shares, user_id, official_symbol)
+        else:
+            db.execute("INSERT INTO shares (name, user_id, amount) VALUES (?, ?, ?)",
+                       official_symbol, user_id, amount)
         
         return redirect("/")
     else:
@@ -201,8 +215,48 @@ def register():
 @app.route("/sell", methods=["GET", "POST"])
 @login_required
 def sell():
-    """Sell shares of stock"""
-    return apology("TODO")
+    if request.method == "POST":
+        user_id = session["user_id"]
+        stocks = db.execute("SELECT name, amount FROM stocks WHERE user_id == ?",
+                            user_id)
+        shares = request.form.get("shares")
+        symbol = request.form.get("symbol")
+        amount = 0
+        
+        for stock in stocks:
+            if stock["name"] == symbol:
+                amount = stock["amount"]
+            else: pass
+        
+        if int(shares) > int(amount):
+            return apology("You don't have that many shares", 403)
+        else:
+            new_shares = int(amount) - int(shares)
+            stock = lookup(symbol)
+            price = stock['price']
+            
+            current_cash = db.execute("SELECT cash FROM users WHERE id == ?",
+                            user_id)
+            print(price, shares, current_cash[0]['cash'])
+            cash = float(price) * float(shares) + float(current_cash[0]['cash'])
+            
+            db.execute("UPDATE users SET cash = ? WHERE id == ?",
+                       cash, user_id)
+            db.execute("INSERT INTO sell (name, amount, time, user_id, value) VALUES(?, ?, ?, ?, ?)",
+                       symbol, shares, datetime.now(), user_id, price)
+            exists = db.execute("SELECT name FROM SHARES WHERE user_id == ? and name = ?",
+                                user_id, symbol)
+            
+            db.execute("UPDATE shares SET amount = ? WHERE user_id == ? and name == ?",
+                        new_shares, user_id, symbol)
+
+            return redirect("/")
+            
+    else:
+        user_id = session["user_id"]
+        stocks = db.execute("SELECT name, amount FROM stocks WHERE user_id == ?",
+                            user_id)
+        return render_template("sell.html", stocks = stocks)
 
 
 def errorhandler(e):
