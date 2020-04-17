@@ -44,8 +44,31 @@ if not os.environ.get("API_KEY"):
 @app.route("/")
 @login_required
 def index():
-    """Show portfolio of stocks"""
-    return apology("TODO")
+    user_id = session["user_id"]
+    cash_dict = db.execute("SELECT cash FROM users WHERE id == ?",
+                          user_id)
+    cash = cash_dict[0]['cash']
+    cash = format(cash, ".2f")
+    cash = float(cash)
+    
+    stocks = db.execute("SELECT name, amount FROM stocks WHERE user_id == ?",
+                        user_id)
+    print(stocks)
+    names = list()
+    
+    grand_total = 0
+
+    for stock in stocks:
+        name = lookup(stock["name"])
+        print(name)
+        stock['price'] = usd(name['price'])
+        stock['symbol'] = name['symbol']
+        stock['name'] = name['name']
+        stock['total'] = usd(name['price'] * stock['amount'])
+        grand_total += name['price'] * stock['amount']
+    
+    print(stocks)
+    return render_template("index.html", stocks = stocks, cash = cash, grand_total = grand_total)
 
 
 @app.route("/buy", methods=["GET", "POST"])
@@ -62,6 +85,7 @@ def buy():
         
         price = stock['price']
         name = stock["name"]
+        official_symbol = stock["symbol"]
         amount = request.form.get("shares")
         cash_dict = db.execute("SELECT cash FROM users WHERE id == ?",
                           user_id)
@@ -72,7 +96,7 @@ def buy():
             return apology("You don't have enough cash", 403)
         else:
             db.execute("INSERT INTO stocks (name, amount, user_id, time, value) VALUES (?, ?, ?, ?, ?)",
-                       name, amount, user_id, datetime.now(), price)
+                       official_symbol, amount, user_id, datetime.now(), price)
             cash -= price * float(amount)
             db.execute("UPDATE users SET cash = ? WHERE id == ?",
                        cash, user_id)
