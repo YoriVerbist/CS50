@@ -1,5 +1,6 @@
 import os
 
+from datetime import datetime
 from cs50 import SQL
 from flask import Flask, flash, jsonify, redirect, render_template, request, session
 from flask_session import Session
@@ -50,8 +51,35 @@ def index():
 @app.route("/buy", methods=["GET", "POST"])
 @login_required
 def buy():
-    """Buy shares of stock"""
-    return apology("TODO")
+    if request.method == "POST":
+        symbol = request.form.get("symbol")
+        stock = lookup(symbol)
+        user_id = session["user_id"]
+        
+        
+        if stock == None:
+            return apology("Stock does not exist", 403)
+        
+        price = stock['price']
+        name = stock["name"]
+        amount = request.form.get("shares")
+        cash_dict = db.execute("SELECT cash FROM users WHERE id == ?",
+                          user_id)
+        cash = cash_dict[0]['cash']
+        print(price, amount)
+        
+        if (price * float(amount)) > int(cash):
+            return apology("You don't have enough cash", 403)
+        else:
+            db.execute("INSERT INTO stocks (name, amount, user_id, time, value) VALUES (?, ?, ?, ?, ?)",
+                       name, amount, user_id, datetime.now(), price)
+            cash -= price * float(amount)
+            db.execute("UPDATE users SET cash = ? WHERE id == ?",
+                       cash, user_id)
+        
+        return redirect("/")
+    else:
+        return render_template("buy.html")
 
 
 @app.route("/history")
