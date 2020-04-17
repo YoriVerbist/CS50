@@ -123,8 +123,22 @@ def buy():
 @app.route("/history")
 @login_required
 def history():
-    """Show history of transactions"""
-    return apology("TODO")
+    user_id = session["user_id"]
+    buys = db.execute("SELECT name, amount, time, value FROM stocks WHERE user_id == ?",
+                       user_id)
+    sells = db.execute("SELECT name, amount, time, value FROM sell WHERE user_id == ?",
+                       user_id)
+    for sell in sells:
+        sell["name"] = sell["name"]
+        sell["time"] = sell["time"]
+        sell["amount"] = "-" + str(sell["amount"])
+        sell["value"] = sell["value"]
+        
+    stocks = buys + sells
+    print(stocks)
+    stocks.sort()
+    
+    return render_template("history.html", stocks = stocks)
 
 
 @app.route("/login", methods=["GET", "POST"])
