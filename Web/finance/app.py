@@ -51,7 +51,7 @@ def index():
     cash = format(cash, ".2f")
     cash = float(cash)
     
-    stocks = db.execute("SELECT name, amount FROM stocks WHERE user_id == ?",
+    stocks = db.execute("SELECT name, amount FROM shares WHERE user_id == ?",
                         user_id)
     print(stocks)
     names = list()
@@ -103,7 +103,7 @@ def buy():
         exists = db.execute("SELECT name FROM SHARES WHERE user_id == ? and name = ?",
                                 user_id, official_symbol)
         print(exists)
-        current_amount = db.execute("SELECT amount FROM stocks WHERE user_id == ? and name == ?",
+        current_amount = db.execute("SELECT amount FROM shares WHERE user_id == ? and name == ?",
                           user_id, official_symbol)
         print(current_amount[0]['amount'])
         
@@ -217,7 +217,7 @@ def register():
 def sell():
     if request.method == "POST":
         user_id = session["user_id"]
-        stocks = db.execute("SELECT name, amount FROM stocks WHERE user_id == ?",
+        stocks = db.execute("SELECT name, amount FROM shares WHERE user_id == ?",
                             user_id)
         shares = request.form.get("shares")
         symbol = request.form.get("symbol")
@@ -244,8 +244,6 @@ def sell():
                        cash, user_id)
             db.execute("INSERT INTO sell (name, amount, time, user_id, value) VALUES(?, ?, ?, ?, ?)",
                        symbol, shares, datetime.now(), user_id, price)
-            exists = db.execute("SELECT name FROM SHARES WHERE user_id == ? and name = ?",
-                                user_id, symbol)
             
             db.execute("UPDATE shares SET amount = ? WHERE user_id == ? and name == ?",
                         new_shares, user_id, symbol)
@@ -254,7 +252,7 @@ def sell():
             
     else:
         user_id = session["user_id"]
-        stocks = db.execute("SELECT name, amount FROM stocks WHERE user_id == ?",
+        stocks = db.execute("SELECT name, amount FROM shares WHERE user_id == ?",
                             user_id)
         return render_template("sell.html", stocks = stocks)
 
