@@ -53,21 +53,18 @@ def index():
     
     stocks = db.execute("SELECT name, amount FROM shares WHERE user_id == ?",
                         user_id)
-    print(stocks)
     names = list()
     
     grand_total = 0
 
     for stock in stocks:
         name = lookup(stock["name"])
-        print(name)
         stock['price'] = usd(name['price'])
         stock['symbol'] = name['symbol']
         stock['name'] = name['name']
         stock['total'] = usd(name['price'] * stock['amount'])
         grand_total += name['price'] * stock['amount']
     
-    print(stocks)
     return render_template("index.html", stocks = stocks, cash = cash, grand_total = grand_total)
 
 
@@ -102,10 +99,8 @@ def buy():
         
         exists = db.execute("SELECT name FROM SHARES WHERE user_id == ? and name = ?",
                                 user_id, official_symbol)
-        print(exists)
         current_amount = db.execute("SELECT amount FROM shares WHERE user_id == ? and name == ?",
                           user_id, official_symbol)
-        print(current_amount[0]['amount'])
         
         if exists != []: 
             new_shares = int(amount) + current_amount[0]['amount']
@@ -249,7 +244,6 @@ def sell():
             
             current_cash = db.execute("SELECT cash FROM users WHERE id == ?",
                             user_id)
-            print(price, shares, current_cash[0]['cash'])
             cash = float(price) * float(shares) + float(current_cash[0]['cash'])
             
             db.execute("UPDATE users SET cash = ? WHERE id == ?",
